@@ -5,12 +5,8 @@ controllers:
     type: attribute
 
 # weather_highlander_says:
-#     path: /weather/highlander-says/{threshold}
+#     path: /weather/highlander-says/{threshold<\d+>?50}
 #     controller: App\Controller\WeatherController::highlanderSays
-#     defaults:
-#       threshold: 50
-#     requirements: 
-#       threshold: \d+
 
 
 # weather_highlander_says_guess:
