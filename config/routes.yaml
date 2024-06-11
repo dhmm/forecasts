@@ -8,3 +8,5 @@ controllers:
 #     path: /weather/highlander-says/{threshold}
 #     controller: App\Controller\WeatherController::highlanderSays
 #     methods: POST|PATCH|GET
+#     defaults:
+#       threshold: 50
