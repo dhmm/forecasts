@@ -12,6 +12,15 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 #[Route('/weather')]
 class WeatherController extends AbstractController
 {
+    #[Route('/{countryCode<[A-Za-z][A-Za-z]>}/{city<[A-Za-z]+>}')]
+    public function forecast(string $countryCode, string $city) : Response
+    {
+        return $this->render('weather/forecast.html.twig' ,
+        [
+            'countryCode' => $countryCode,
+            'city'=> $city
+        ]);
+    }
     #[Route('/highlander-says/{threshold<\d+>?50}', host:'api.localhost' )]
     public function highlanderSaysApi(int $threshold) : Response
     {        
@@ -43,8 +52,7 @@ class WeatherController extends AbstractController
         //return response
         return $this->render('weather/highlander_says.html.twig',  [
             'forecast' => $forecast
-        ]
-    );
+        ]);
     }
 
     #[Route('/highlander-says/{guess}')]
