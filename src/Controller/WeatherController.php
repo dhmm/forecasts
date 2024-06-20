@@ -7,6 +7,7 @@ use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Config\Definition\Exception\Exception as ExceptionException;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -47,15 +48,21 @@ class WeatherController extends AbstractController
     }
 
     #[Route('/highlander-says/{threshold<\d+>?50}')]
-    public function highlanderSays(int $threshold) : Response
-    {        
-        $draw = random_int(0,100);
+    public function highlanderSays(int $threshold, Request $request) : Response
+    {      
+        $trials = $request->get('trials' , 1);
         
-        $forecast = $draw < $threshold ? "It's going to rain" : "It's going to be sunny";
+        $forecasts =[];
+
+        for($i=0;$i<$trials;$i++) {
+            $draw = random_int(0,100);
+            $forecast = $draw < $threshold ? "It's going to rain" : "It's going to be sunny";
+            $forecasts [] = $forecast;
+        }
 
         //return response
         return $this->render('weather/highlander_says.html.twig',  [
-            'forecast' => $forecast
+            'forecasts' => $forecasts
         ]);
     }
 
@@ -76,7 +83,7 @@ class WeatherController extends AbstractController
 
         //return response
         return $this->render('weather/highlander_says.html.twig',  [
-                'forecast' => $forecast
+                'forecasts' => [$forecast]
             ]
         );
     }
