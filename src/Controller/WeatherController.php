@@ -9,6 +9,7 @@ use Symfony\Component\Config\Definition\Exception\Exception as ExceptionExceptio
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -26,8 +27,8 @@ class WeatherController extends AbstractController
             'city'=> $city
         ]);
     }
-    #[Route('/highlander-says/{threshold<\d+>?50}', host:'api.localhost' )]
-    public function highlanderSaysApi(int $threshold) : Response
+    #[Route('/highlander-says/api')]
+    public function highlanderSaysApi(#[MapQueryParameter] int $threshold = 50) : Response
     {        
         $draw = random_int(0,100);
         
@@ -35,6 +36,7 @@ class WeatherController extends AbstractController
 
         $json = [
             'forecast' => $forecast,
+            'threshold' => $threshold,
             'self' => $this->generateUrl(
                 'app_weather_highlandersaysapi', 
                 [
