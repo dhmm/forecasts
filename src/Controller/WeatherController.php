@@ -3,9 +3,13 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Config\Definition\Exception\Exception as ExceptionException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -58,6 +62,16 @@ class WeatherController extends AbstractController
     #[Route('/highlander-says/{guess}')]
     public function highlanderSaysGuess(string $guess) : Response
     {
+        $availableGuesses = ['snow' , 'rain' , 'hail'];
+
+        if(!in_array($guess, $availableGuesses))
+        {
+            throw $this->createNotFoundException('This guess is not found');
+            // throw new NotFoundHttpException('This guess is not found');
+            // throw new BadRequestHttpException('Bad request');
+            // throw new Exception('An exception');
+        }
+
         $forecast = "It's going to $guess";
 
         //return response
