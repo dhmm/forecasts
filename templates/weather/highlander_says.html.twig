@@ -6,7 +6,12 @@
 
 {% block body %}
     <h1>Higlander says</h1>
-    {% for forecast in forecasts %}
+
+    {% for message in app.flashes('info')%}
+        <div>{{message}}</div>
+    {% endfor %}
+    
+    {% for forecast in forecasts %} 
     <p>{{forecast}}</p>
     {% endfor %}
 
