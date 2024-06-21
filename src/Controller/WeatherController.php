@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
+use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,7 +31,7 @@ class WeatherController extends AbstractController
         ]);
     }
     #[Route('/highlander-says/api')]
-    public function highlanderSaysApi(#[MapQueryString] ?HighlanderApiDTO $dto = null) : Response
+    public function highlanderSaysApi(#[MapRequestPayload] ?HighlanderApiDTO $dto = null) : Response
     {        
         if(!$dto) {
             $dto = new HighlanderApiDTO();
