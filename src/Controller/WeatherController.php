@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -32,7 +33,9 @@ class WeatherController extends AbstractController
         ]);
     }
     #[Route('/highlander-says/api')]
-    public function highlanderSaysApi(#[MapRequestPayload] ?HighlanderApiDTO $dto = null) : Response
+    public function highlanderSaysApi(
+        #[MapQueryString] ?HighlanderApiDTO $dto = null
+    ) : Response
     {        
         if(!$dto) {
             $dto = new HighlanderApiDTO();
@@ -52,6 +55,13 @@ class WeatherController extends AbstractController
         ];
 
         return new JsonResponse($json);
+        // return $this->json($json);
+        
+        // return $this->file(
+        //     __DIR__.'/logo-black.png',
+        //     'demo.txt',
+        //     ResponseHeaderBag::DISPOSITION_INLINE
+        // );
     }
 
     #[Route('/highlander-says/{threshold<\d+>}')]
