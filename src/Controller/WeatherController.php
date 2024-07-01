@@ -26,11 +26,40 @@ class WeatherController extends AbstractController
     #[Route('/{countryCode<[A-Za-z][A-Za-z]>}/{city<[A-Za-z]+>}')]
     public function forecast(string $countryCode, string $city) : Response
     {
-        return $this->render('weather/forecast.html.twig' ,
-        [
-            'countryCode' => $countryCode,
-            'city'=> $city
-        ]);
+        $dummyData = [
+            [
+                'date' => new \DateTime('28-6-2024'),
+                'temperature' => 17,
+                'feels_like' => 16,
+                'pressure' => 900,
+                'humidity' => 17,
+                'wind' => 7.2,
+                'cloudiness' => 45,
+                'icon' => 'sun',
+            ],
+            [
+                'date' => new \DateTime('28-6-2024'),
+                'temperature' => 17,
+                'feels_like' => 16,
+                'pressure' => 560,
+                'humidity' => 17,
+                'wind' => 7.2,
+                'cloudiness' => 95,
+                'icon' => 'sun',
+            ],
+            [
+                'date' => new \DateTime('28-6-2024'),
+                'temperature' => 17,
+                'feels_like' => 16,
+                'pressure' => 899,
+                'humidity' => 17,
+                'wind' => 7.2,
+                'cloudiness' => 45,
+                'icon' => 'sun',
+            ]
+        ];
+
+        return $this->render('weather/forecast.html.twig' , ['dummyData' => $dummyData]);
     }
     #[Route('/highlander-says/api')]
     public function highlanderSaysApi(

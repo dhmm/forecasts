@@ -5,5 +5,15 @@
 {% endblock %}
 
 {% block body %}
-    <h1>{{countryCode}}:{{city}}</h1>
+    {% for data in dummyData %}
+        <h1>{{data.date | date('d-m-Y')}}</h1>
+        <p><b>temperature :</b>{{data.temperature}} </p>
+        <p><b>feels_like :</b>{{data.feels_like}}</p>
+        <p><b>pressure :</b>{{data.pressure}}</p>
+        <p><b>humidity :</b>{{data.humidity}}</p>
+        <p><b> wind :</b>{{data.wind}}</p>
+        <p><b>cloudiness :</b>{{data.cloudiness}}</p>
+        <p><b>icon :</b>{{data.icon}}</p>
+        
+    {%  endfor %}
 {% endblock %}
