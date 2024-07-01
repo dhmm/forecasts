@@ -119,10 +119,14 @@ class WeatherController extends AbstractController
         }
 
         //return response
-        return $this->render('weather/highlander_says.html.twig',  [
+        $html = $this->renderView('weather/highlander_says.html.twig',  [
             'forecasts' => $forecasts,
             'threshold' => $threshold            
         ]);
+
+        $response = new Response($html);
+
+        return $response;
     }
 
     #[Route('/highlander-says/{guess}')]
