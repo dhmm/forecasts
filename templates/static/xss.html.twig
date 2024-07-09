@@ -1,0 +1,17 @@
+{% extends "layout_fluid.html.twig" %}
+
+{% block content %}
+    {% set name = app.request.get('name') %}
+	{% if name %}
+		<div>Hello
+			<strong>{{name}}</strong>
+		</div>
+	{% else %}
+		<div>Enter a name :
+		</div>
+	{% endif %}
+
+	<form>
+		<input type="text" name="name" value="{{name}}">
+	</form>
+{% endblock %}
