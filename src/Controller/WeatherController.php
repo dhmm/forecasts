@@ -19,8 +19,11 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[Route('/weather')]
+#[Route('/{_locale}/weather'  , requirements: [
+    '_locale' => 'en|de'
+])]
 class WeatherController extends AbstractController
 {
     #[Route('/{countryCode<[A-Za-z][A-Za-z]>}/{city<[A-Za-z]+>}')]
@@ -97,6 +100,7 @@ class WeatherController extends AbstractController
     public function highlanderSays( 
         Request $request, 
         RequestStack $requestStack,
+        TranslatorInterface $translator,
         ?int $threshold = null,
         #[MapQueryParameter] ?string $format = 'html'
     ) : Response
@@ -104,7 +108,9 @@ class WeatherController extends AbstractController
         $session = $requestStack->getSession();
         if($threshold) {
             $session->set('threshold' , $threshold);
-            $this->addFlash('info' , 'Session threshold set' );
+            $this->addFlash("info" , $translator->trans('weather.highlander_says.success' , [
+                '%threshold%' => $threshold
+            ]) );
         } else {
             $threshold = $session->get('threshold' , 50);          
         }
