@@ -51,7 +51,7 @@ class LocationController extends AbstractController
         int $id) : JsonResponse
     {
         $location = $locationRepository->find($id);
-        $locationRepository->remove($location, flush: true);
+        $locationRepository->remove(entity: $location, flush: true);
 
         return new JsonResponse(null);
     }
