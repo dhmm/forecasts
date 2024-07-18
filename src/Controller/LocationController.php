@@ -7,6 +7,8 @@ use App\Repository\LocationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStackInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/location-dummy')]
@@ -42,5 +44,15 @@ class LocationController extends AbstractController
             'id' => $location->getId(),
             'name' => $location->getName(),
         ]);
+    }
+    #[Route('/remove/{id}')]
+    public function remove(
+        LocationRepository $locationRepository,
+        int $id) : JsonResponse
+    {
+        $location = $locationRepository->find($id);
+        $locationRepository->remove($location, flush: true);
+
+        return new JsonResponse(null);
     }
 }
