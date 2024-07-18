@@ -22,9 +22,8 @@ class LocationController extends AbstractController
             ->setName('Szczecin')
             ->setCountryCode('PL')
             ->setLatitude(53.4285)
-            ->setLongitude(14.5528)
-        ;
-        
+            ->setLongitude(14.5528);
+
         $locationRepository->save($location, true);
 
         return new JsonResponse([
@@ -39,7 +38,7 @@ class LocationController extends AbstractController
         $location->setName('Komotini');
 
         $locationRepository->save($location, true);
-        
+
         return new JsonResponse([
             'id' => $location->getId(),
             'name' => $location->getName(),
@@ -48,11 +47,47 @@ class LocationController extends AbstractController
     #[Route('/remove/{id}')]
     public function remove(
         LocationRepository $locationRepository,
-        int $id) : JsonResponse
-    {
+        int $id
+    ): JsonResponse {
         $location = $locationRepository->find($id);
         $locationRepository->remove(entity: $location, flush: true);
 
         return new JsonResponse(null);
+    }
+
+    #[Route('/show/{name}')]
+    public function show(LocationRepository $locationRepository, string $name): JsonResponse
+    {
+        $location = $locationRepository->findOneByName($name);
+
+
+        $json[] = [
+            'id' => $location->getId(),
+            'name' => $location->getName(),
+            'countryCode' => $location->getCountryCode(),
+            'latitude' => $location->getLatitude(),
+            'longitude' => $location->getlongitude(),
+        ];
+
+
+        return new JsonResponse($json);
+    }
+
+    #[Route('/')]
+    public function index(LocationRepository $locationRepository): JsonResponse
+    {
+        $locations = $locationRepository->findAll();
+        $json = [];
+        foreach ($locations as $location) {
+            $json[] = [
+                'id' => $location->getId(),
+                'name' => $location->getName(),
+                'countryCode' => $location->getCountryCode(),
+                'latitude' => $location->getLatitude(),
+                'longitude' => $location->getlongitude(),
+            ];
+        }
+
+        return new JsonResponse($json);
     }
 }
