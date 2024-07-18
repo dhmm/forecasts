@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class LocationController extends AbstractController
 {
     #[Route('/create')]
-    public function create(EntityManagerInterface $entityManager): JsonResponse
+    public function create(LocationRepository $locationRepository): JsonResponse
     {
         $location = new Location();
         $location
@@ -23,8 +23,7 @@ class LocationController extends AbstractController
             ->setLongitude(14.5528)
         ;
         
-        $entityManager->persist($location);
-        $entityManager->flush();
+        $locationRepository->save($location, true);
 
         return new JsonResponse([
             'id' => $location->getId(),
@@ -32,12 +31,12 @@ class LocationController extends AbstractController
     }
 
     #[Route('/edit')]
-    public function edit(LocationRepository $locationRepository, EntityManagerInterface $entityManager): JsonResponse
+    public function edit(LocationRepository $locationRepository): JsonResponse
     {
-        $location = $locationRepository->find(6);
+        $location = $locationRepository->find(9);
         $location->setName('Komotini');
 
-        $entityManager->flush();
+        $locationRepository->save($location, true);
         
         return new JsonResponse([
             'id' => $location->getId(),

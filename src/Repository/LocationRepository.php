@@ -15,7 +15,14 @@ class LocationRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Location::class);
     }
-
+    public function save(Location $entity, bool $flush = false) : void
+    {
+        $entityManager = $this->getEntityManager();
+        $entityManager->persist($entity);
+        if($flush) {
+            $entityManager->flush();
+        }
+    }
     //    /**
     //     * @return Location[] Returns an array of Location objects
     //     */
