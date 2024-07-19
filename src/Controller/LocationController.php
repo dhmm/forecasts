@@ -58,8 +58,12 @@ class LocationController extends AbstractController
     #[Route('/show/{name}')]
     public function show(LocationRepository $locationRepository, string $name): JsonResponse
     {
-        $location = $locationRepository->findOneByName($name);
+        $location = $locationRepository->findOneByNameAndCountryCode($name, 'PL');
 
+        if(!$location)
+        {
+            throw $this->createNotFoundException();
+        }
 
         $json[] = [
             'id' => $location->getId(),
