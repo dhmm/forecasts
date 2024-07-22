@@ -17,8 +17,7 @@ class LocationFormController extends AbstractController
     #[Route('/new')]
     public function new(): Response
     {
-        $location = new Location();        
-        $location->setCountryCode('ES');
+        $location = new Location();
 
         $form = $this->createForm(LocationFormTestType::class, $location);        
 
