@@ -8,3 +8,17 @@ App\Entity\Location:
           max: 255
           minMessage: 'Location name must be at least {{ limit }} characters long'
           maxMessage: 'Location name cannot be longer than {{ limit }} characters'
+    countryCode:
+      - NotBlank: ~
+    latitude:
+      - NotBlank: ~
+      - Range:
+          min: -90
+          max: 90
+          notInRangeMessage: "The {{ label }} must be between {{ min }} and {{ max }} degrees"
+    longitude:
+      - NotBlank: ~
+      - Range:
+          min: -180
+          max: 180
+          notInRangeMessage: "The {{ label }} must be between {{ min }} and {{ max }} degrees"
