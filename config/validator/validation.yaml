@@ -16,9 +16,13 @@ App\Entity\Location:
           min: -90
           max: 90
           notInRangeMessage: "The {{ label }} must be between {{ min }} and {{ max }} degrees"
+      - NotEqualTo:
+          value: 0
     longitude:
       - NotBlank: ~
       - Range:
           min: -180
           max: 180
           notInRangeMessage: "The {{ label }} must be between {{ min }} and {{ max }} degrees"
+      - NotEqualTo:
+          value: 0

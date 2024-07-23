@@ -24,15 +24,36 @@ class LocationFormController extends AbstractController
     {
         $location = new Location();
 
+        $form = $this->createForm(LocationFormTestType::class, $location , [
+            'validation_groups' => ''
+        ]);        
+
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $locationRepository->save($location, true);  
+            return $this->redirectToRoute('app_locationform_edit' , [ "id"=>$location->getId() ]);
+        }
+        return $this->render('location_form/new.html.twig', [
+            'form' => $form,
+        ]);
+    }
+    #[Route('/edit/{id}')]
+    public function edit(
+        Request $request,
+        Location $location,
+        LocationRepository $locationRepository
+    ): Response
+    {
         $form = $this->createForm(LocationFormTestType::class, $location);        
 
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid())
         {
             $locationRepository->save($location, true);  
-            return $this->redirectToRoute('app_location_index');
+            return $this->redirectToRoute('app_locationform_edit', [ "id"=>$location->getId() ]);
         }
-        return $this->render('location_form/new.html.twig', [
+        return $this->render('location_form/edit.html.twig', [
             'form' => $form,
         ]);
     }
