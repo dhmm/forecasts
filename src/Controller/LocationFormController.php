@@ -23,9 +23,12 @@ class LocationFormController extends AbstractController
     ): Response
     {
         $location = new Location();
+        $location
+            ->setLongitude(0)
+            -> setLatitude(0);
 
         $form = $this->createForm(LocationFormTestType::class, $location , [
-            'validation_groups' => ''
+            'validation_groups' => ['new']
         ]);        
 
         $form->handleRequest($request);
@@ -45,7 +48,9 @@ class LocationFormController extends AbstractController
         LocationRepository $locationRepository
     ): Response
     {
-        $form = $this->createForm(LocationFormTestType::class, $location);        
+        $form = $this->createForm(LocationFormTestType::class, $location, [
+            'validation_groups' => ['edit']
+        ]);        
 
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid())

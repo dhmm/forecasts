@@ -3,26 +3,35 @@ App\Entity\Location:
     name:
       - NotBlank:
           message: "Location name must be specified"
+          groups: ['new' , 'edit']
       - Length:
           min: 3
           max: 255
           minMessage: 'Location name must be at least {{ limit }} characters long'
           maxMessage: 'Location name cannot be longer than {{ limit }} characters'
+          groups: ['new' , 'edit']
     countryCode:
-      - NotBlank: ~
+      - NotBlank:
+          groups: ['new' , 'edit']
     latitude:
-      - NotBlank: ~
+      - NotBlank: 
+          groups: ['new' , 'edit']
       - Range:
           min: -90
           max: 90
           notInRangeMessage: "The {{ label }} must be between {{ min }} and {{ max }} degrees"
+          groups: ['new' , 'edit']
       - NotEqualTo:
           value: 0
+          groups: ['edit']
     longitude:
-      - NotBlank: ~
+      - NotBlank:
+          groups: ['new' , 'edit']
       - Range:
           min: -180
           max: 180
           notInRangeMessage: "The {{ label }} must be between {{ min }} and {{ max }} degrees"
+          groups: ['new' , 'edit']
       - NotEqualTo:
           value: 0
+          groups: ['edit']
