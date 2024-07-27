@@ -2,10 +2,7 @@
 
 namespace App\Command;
 
-use App\Repository\ForecastRepository;
-use App\Repository\LocationRepository;
 use App\Service\Highlander;
-use Doctrine\Migrations\Configuration\EntityManager\ManagerRegistryEntityManager;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -15,15 +12,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
-    name: 'app:get',
+    name: 'highlander:say',
     description: 'Add a short description for your command',
 )]
-class GetCommand extends Command
+class HighlanderSayCommand extends Command
 {
-    public function __construct(private LocationRepository $locationRepository)
+    public function __construct(private Highlander $highlander)
     {
         parent::__construct();
-        // $this->$locationRepository = $locationRepository;
     }
 
     protected function configure(): void
@@ -35,19 +31,8 @@ class GetCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         
-        $locations = $this->locationRepository->findAll();
-        
-        $locationsTable = [];
-        foreach($locations as $location)
-        {
-            $locationsTable [] = [$location->getName() , $location->getCountryCode() ];
-        }
-        $io->table(
-            [ 'Name' , 'Country Code '] ,
-            $locationsTable
-        );
-        // $io->writeln($locations);
-
+        $forecasts = $this->highlander->say(50, 5);
+        $io->listing($forecasts);
         return Command::SUCCESS;
     }
 }
