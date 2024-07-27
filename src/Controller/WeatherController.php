@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use Exception;
 use App\Model\HighlanderApiDTO;
+use App\Service\Highlander;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Config\Definition\Exception\Exception as ExceptionException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -66,6 +67,7 @@ class WeatherController extends AbstractController
     }
     #[Route('/highlander-says/api')]
     public function highlanderSaysApi(
+        Highlander $higlander,
         #[MapQueryString] ?HighlanderApiDTO $dto = null
     ) : Response
     {        
@@ -75,11 +77,7 @@ class WeatherController extends AbstractController
             $dto->trials = 1;
         }
 
-        for($i=0;$i<$dto->trials;$i++) {
-            $draw = random_int(0,100);
-            $forecast = $draw < $dto->threshold ? "It's going to rain" : "It's going to be sunny";
-            $forecasts [] = $forecast;
-        }
+        $forecasts [] = $higlander->say($dto->threshold, $dto->trials);
 
         $json = [
             'forecasts' => $forecasts,
@@ -87,19 +85,13 @@ class WeatherController extends AbstractController
         ];
 
         return new JsonResponse($json);
-        // return $this->json($json);
-        
-        // return $this->file(
-        //     __DIR__.'/logo-black.png',
-        //     'demo.txt',
-        //     ResponseHeaderBag::DISPOSITION_INLINE
-        // );
     }
 
     #[Route('/highlander-says/{threshold<\d+>}')]
     public function highlanderSays( 
         Request $request, 
         RequestStack $requestStack,
+        Highlander $highlander,
         TranslatorInterface $translator,
         ?int $threshold = null,
         #[MapQueryParameter] ?string $format = 'html'
@@ -117,13 +109,7 @@ class WeatherController extends AbstractController
 
         $trials = $request->get('trials' , 1);
         
-        $forecasts =[];
-
-        for($i=0;$i<$trials;$i++) {
-            $draw = random_int(0,100);
-            $forecast = $draw < $threshold ? "It's going to rain" : "It's going to be sunny";
-            $forecasts [] = $forecast;
-        }
+        $forecasts = $highlander->say($threshold, $trials);
 
         //return response
         $html = $this->renderView("weather/highlander_says.{$format}.twig",  [
