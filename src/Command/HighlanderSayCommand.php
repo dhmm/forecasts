@@ -10,6 +10,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Twig\Environment;
 
 #[AsCommand(
     name: 'highlander:say',
@@ -17,7 +18,10 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class HighlanderSayCommand extends Command
 {
-    public function __construct(private Highlander $highlander)
+    public function __construct (
+        private Highlander $highlander,
+        private Environment $twigEnvironment
+        )
     {
         parent::__construct();
     }
@@ -33,6 +37,10 @@ class HighlanderSayCommand extends Command
         
         $forecasts = $this->highlander->say(50, 5);
         $io->listing($forecasts);
+
+        $csv = $this->twigEnvironment->render('weather/highlander_says.csv.twig', [ 'forecasts' => $forecasts , 'threshold' => 50 , 'trials' => 0]);
+        $io->write($csv);
+        
         return Command::SUCCESS;
     }
 }
