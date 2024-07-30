@@ -35,7 +35,7 @@ class HighlanderSayCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         
-        $forecasts = $this->highlander->say(50, 5);
+        $forecasts = $this->highlander->say(-1, -5);
         $io->listing($forecasts);
 
         $csv = $this->twigEnvironment->render('weather/highlander_says.csv.twig', [ 'forecasts' => $forecasts , 'threshold' => 50 , 'trials' => 0]);
