@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/api/v1/weather')]
 class WeatherApiController extends AbstractController
 {
-    #[Route('/json/{id}', name: 'app_weather_api')]
+    #[Route('/json/{id}')]
     public function jsonAction(Location $location): Response
     {
         $data = [
@@ -33,6 +33,28 @@ class WeatherApiController extends AbstractController
         $json = json_encode($data, JSON_PRETTY_PRINT);
         $response = new Response($json); 
         $response->headers->set('Content-Type' , 'application/json');
+
+        return $response;
+    }
+    #[Route('/jsont/{id}', name: 'app_weather_api')]
+    public function jsonTwigAction(Location $location): Response
+    {
+        $content = $this->renderView('weather_api/json_twig.json.twig', [
+            'location' => $location
+        ]);
+        $response  =new Response($content);
+        $response->headers->set('Content-Type' , 'application/json');
+
+        return $response;
+    }
+    #[Route('/csvt/{id}', name: 'app_weather_api')]
+    public function csvTwigAction(Location $location): Response
+    {
+        $content = $this->renderView('weather_api/csv_twig.csv.twig', [
+            'location' => $location
+        ]);
+        $response  =new Response($content);
+        $response->headers->set('Content-Type' , 'text/csv');
 
         return $response;
     }
