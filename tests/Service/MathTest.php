@@ -4,6 +4,7 @@ namespace App\Tests\Service;
 
 use App\Service\Math;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 class MathTest extends TestCase
 {
@@ -25,11 +26,11 @@ class MathTest extends TestCase
      */
     public function testAdd($a, $b, $expectedResult): void
     {
-        $this->markTestIncomplete();
+        $mockLogger = $this->createMock(LoggerInterface::class);
 
-        // $math = new Math();
-        // $result = $math->add($a, $b);
+        $math = new Math($mockLogger);
+        $result = $math->add($a, $b);
 
-        // $this->assertEquals($expectedResult, $result, "$a + $b should equal $expectedResult on Math::add()");
+        $this->assertEquals($expectedResult, $result, "$a + $b should equal $expectedResult on Math::add()");
     }
 }
